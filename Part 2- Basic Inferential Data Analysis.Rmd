@@ -1,0 +1,72 @@
+---
+title: "Part 2-Basic Inferential Data Analysis"
+author: "Harikrishna Vemula"
+date: "10/13/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load the ToothGrowth data and perform exploratory data analyses
+```{r}
+library(datasets)
+data(ToothGrowth)
+str(ToothGrowth)
+head(ToothGrowth)
+summary(ToothGrowth)
+```
+
+```{r}
+library(ggplot2)
+t = ToothGrowth
+levels(t$supp) <- c("Orange Juice", "Ascorbic Acid")
+ggplot(t, aes(x=factor(dose), y=len)) + 
+  facet_grid(.~supp) +
+  geom_boxplot(aes(fill = supp), show.legend = FALSE) +
+  labs(title="Tooth Length by Dose", 
+    x="Dose",
+    y="Tooth Length")
+```
+### Basic summary of the data
+1. While Dose increases, Tooth Growth is increasing, So Dose is proportional to Tooth Growth 
+2. Orange Juice is more effective with comapre to Ascorbic Acid, while dose from 0.5 to 2, and when dose is at 2, it slightly similar with Ascorbic Acid.
+
+### Use confidence intervals & hypothesis tests to compare tooth growth by supplement and dose
+#### Hypo Test:1
+
+```{r}
+test1<-t.test(len ~ supp, data = t)
+test1$conf.int
+test1$p.value
+```
+#### Hypo Test:2
+```{r}
+test2<-t.test(len ~ supp, data = subset(t, dose == 0.5))
+test2$conf.int
+test2$p.value
+```
+#### Hypo Test:3
+```{r}
+test3<-t.test(len ~ supp, data = subset(t, dose == 1))
+test3$conf.int
+test3$p.value
+```
+
+#### Hypo Test:4
+```{r}
+test4<-t.test(len ~ supp, data = subset(t, dose == 2))
+test4$conf.int
+test4$p.value
+```
+### Conclusions & Assumptions
+#### Conclusions
+1. While Dose increases, Tooth Growth is increasing, So Dose is proportional to Tooth Growth 
+2. Orange Juice is more effective with comapre to Ascorbic Acid, while dose from 0.5 to 2, and when dose is at 2, it slightly similar with Ascorbic Acid.
+
+#### Assumptions
+1.By assuming Hypo tests the underlying data is independent and normally distributed.
+2.Observed that the data represents random id samples.

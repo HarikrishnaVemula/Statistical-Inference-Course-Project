@@ -1,0 +1,90 @@
+---
+title: "Part 1-Simulation Exercise"
+author: "Harikrishna Vemula"
+date: "10/13/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{R echo=TRUE, warning=FALSE,message=FALSE}
+library(knitr)
+library(ggplot2)
+```
+
+## Overview
+
+This is part 1 assignment on Simulation Exercise using R. This Simulation Exercise intension is, investigating the exponential distribution and compare it with the Central Limit Theorem. 
+
+## Simulations
+initializing variables lambda, seed, n and n's simulation.
+```{r}
+ECHO=TRUE
+set.seed(1337)
+lambda = 0.2
+n = 40
+nsm = 1000
+```
+Calculating mean for 1000 samples of 40 exponentials
+
+```{r}
+ex <- replicate(nsm, rexp(n, lambda))
+exp_means <- apply(ex, 2, mean)
+```
+
+## 1.Sample Mean versus Theoretical Mean
+#### Sample Mean
+Calculating the mean .
+```{r}
+mean(exp_means)
+```
+
+#### Theoretical Mean
+Calculating theoretical mean.
+```{r}
+lambda^-1
+```
+
+#### Difference
+sample mean Vs exponential distribution theoretical mean.
+```{r}
+abs(mean(exp_means)-lambda^-1)
+```
+
+## 2.Sample Variance versus Theoretical Variance
+#### Sample Variance
+Calculating sample variance
+variance.
+```{r}
+var(exp_means)
+```
+
+#### Theoretical Variance
+Calculating theoretical variance
+```{r}
+(lambda * sqrt(n))^-2
+```
+
+#### Difference
+Sample Variance Vs Theoretical Variance
+```{r}
+abs(var(exp_means)-(lambda * sqrt(n))^-2)
+```
+
+## Distribution
+The following graph illustrates histogram for 1000 simulations.
+```{r}
+library(ggplot2)
+ggplot(data.frame(y=exp_means), aes(x=y)) + 
+  geom_histogram(aes(y=..density..), binwidth=0.2, fill="blue",color="red") +  
+  stat_function(fun=dnorm, args=list(mean=lambda^-1,sd=(lambda*sqrt(n))^-1), 
+                size=2) +
+  labs(title="Simulations", x="Mean")
+
+
+```
