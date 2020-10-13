@@ -43,6 +43,7 @@ test1<-t.test(len ~ supp, data = t)
 test1$conf.int
 test1$p.value
 ```
+
 #### Hypo Test:2
 ```{r}
 test2<-t.test(len ~ supp, data = subset(t, dose == 0.5))
